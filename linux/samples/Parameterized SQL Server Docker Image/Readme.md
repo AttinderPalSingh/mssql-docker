@@ -32,7 +32,8 @@ A flexible Docker setup for Microsoft SQL Server with configurable components in
 
 4. ** Deploy and Run **
    ```bash
-   docker 
+   docker run -d --name sqlfts -p 14305:1433 -h sqlfts -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=<yourPassword> sqlserver-fts:latest
+   ``` 
 
 ## Configuration
 
