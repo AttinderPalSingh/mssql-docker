@@ -1,0 +1,28 @@
+# SQL Server Command Line Tools
+FROM ubuntu:24.04
+
+LABEL maintainer="SQL Server Engineering Team"
+
+# apt-get and system utilities
+RUN apt-get update && apt-get install -y \
+	curl ca-certificates apt-transport-https debconf-utils gnupg2 
+
+# Add the Microsoft repository for Ubuntu 24.04
+RUN curl -fsSL https://packages.microsoft.com/config/ubuntu/24.04/prod.list \
+    | tee /etc/apt/sources.list.d/mssql-release.list
+
+# Install SQL Server drivers and tools (ODBC 18 / tools 18)
+RUN apt-get update && ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18
+
+
+
+# Make sqlcmd/bcp available on PATH for all (non-interactive) shells
+ENV PATH="$PATH:/opt/mssql-tools18/bin"
+
+# Locale setup
+RUN apt-get -y install locales \
+&& rm -rf /var/lib/apt/lists/*
+RUN locale-gen en_US.UTF-8
+RUN update-locale LANG=en_US.UTF-8
+
+CMD ["/bin/bash"]
